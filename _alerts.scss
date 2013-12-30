@@ -1,0 +1,192 @@
+////////////////////////////////////
+// ALERTS
+////////////////////////////////////
+
+/*
+	<div id="dl-app-alert" class="alert--warning alert--flyover" data-slide="slide" role="alert">
+		<div class="alert-inner">
+			<p><strong>Use the new Downloader app</strong> for downloading music easier, even when your connection fails.</p>
+			<span role="button" class="trigger-alert-close trigger-setcookie-hasMusicDlApp">OK, close this</span> &nbsp; &nbsp; &nbsp; &nbsp; 
+			<a href="/music/downloader">Find out more</a>
+		</div>
+	</div>
+*/
+
+/*
+	<div class="alert--warning" role="alert">
+		<span aria-hidden="true" class="icon--warning"></span> Careful! <a href="#">link color</a>
+	</div>
+*/
+
+// default variables
+
+// shared
+////////////////////////////
+$alert-inset 				: false !default;
+$alert-inset-vert			: false !default;
+$alert-line-height 			: $icon-size-large !default;
+$alert-padding 				: .5rem 2rem .5rem 1rem !default;
+$alert-border-sides 		: all !default;
+$alert-border-width 		: 1px !default;
+$alert-border-style 		: solid !default;
+$alert-radius 				: $default-border-radius !default;
+$alert-shadow 				: false !default;
+$alert-constrained-width	: 60em !default;
+
+// alert-info
+////////////////////////////
+$alert-info-bg 				: #d9eff9 !default;
+$alert-info-border-color  	: darken($alert-info-bg, 10%) !default;
+$alert-info-color			: darken($page-color, 10%) !default;
+$alert-info-link-color		: darken($link-color, 10%) !default;
+
+// alert-success
+////////////////////////////
+$alert-success-bg 			: #d5efbf !default;
+$alert-success-border-color : darken($alert-success-bg, 10%) !default;
+$alert-success-color 		: darken($page-color, 10%) !default;
+$alert-success-link-color 	: darken($link-color, 10%) !default;
+
+// alert-error
+////////////////////////////
+$alert-error-bg 			: #f9d6d6 !default;
+$alert-error-border-color 	: darken($alert-error-bg, 10%) !default;
+$alert-error-color			: darken($page-color, 10%) !default;
+$alert-error-link-color 	: darken($link-color, 10%) !default;
+
+// alert-warning
+////////////////////////////
+$alert-warning-bg			: #f9ebb2 !default;
+$alert-warning-border-color : darken($alert-warning-bg, 10%) !default;
+$alert-warning-color 		: darken($page-color, 10%) !default;
+$alert-warning-link-color 	: darken($link-color, 10%) !default;
+
+// alert-inverse
+////////////////////////////
+$alert-inv-bg 			: #333 !default;
+$alert-inv-border-color : $black !default;
+$alert-inv-color 		: #ccc !default;
+$alert-inv-link-color 	: $link-color !default;
+
+// alert flyover
+////////////////////////////
+$alert-flyover-padding: 0.5em 2em !default;
+
+// theming
+%theme-alert {
+	@include rem(padding, $alert-padding);
+	@include border-radius();
+}
+
+// Alerts
+
+%alert {
+	position: relative;
+	max-width: $alert-constrained-width;
+	@include rem(margin, 1.5rem auto);
+	line-height: $alert-line-height;
+	//theme
+	@extend %theme-alert;
+	
+	h2,h3,h4,h5,p {
+		@include rem(margin-bottom, 5px);
+	}
+}
+
+$alertTypes:
+// info
+info 
+$alert-info-bg 
+$alert-border-sides 
+$alert-border-width $alert-border-style $alert-info-border-color 
+$alert-shadow 
+$alert-info-color 
+$alert-info-link-color,
+// success
+success 
+$alert-success-bg 
+$alert-border-sides 
+$alert-border-width $alert-border-style $alert-success-border-color 
+$alert-shadow 
+$alert-success-color 
+$alert-success-link-color,
+// error
+error 
+$alert-error-bg 
+$alert-border-sides 
+$alert-border-width $alert-border-style $alert-error-border-color 
+$alert-shadow 
+$alert-error-color 
+$alert-error-link-color,
+// warning
+warning 
+$alert-warning-bg 
+$alert-border-sides 
+$alert-border-width $alert-border-style $alert-warning-border-color 
+$alert-shadow 
+$alert-warning-color 
+$alert-warning-link-color;
+
+// bg, 				nth: ($type, 2)
+// border-sides, 	nth: ($type, 3)
+// border-width, 	nth: ($type, 4)
+// border-style, 	nth: ($type, 5)
+// border-color, 	nth: ($type, 6)
+// shadow, 			nth: ($type, 7)
+
+// text color, 		nth: ($type, 8)
+// link color, 		nth: ($type, 9)
+
+// auto-generate alert type name based on 1st value 'nth($type,1)' of each list set in $alertTypes
+// interpolate and append type to class name prefix 'alert--'
+// call each list set item in accordance with position via 'nth($type,2-9)' and place in box-theme mixin
+// set alerts global theme properties to false so that they do not have to be overriden, but rather only output from %theme-alert
+@each $type in $alertTypes {
+	.alert--#{nth($type,1)} {
+		@include box-theme(
+			nth($type,2), 
+			false, // padding is in %theme-alert
+			nth($type,3), nth($type,4) nth($type,5) nth($type,6), 
+			false, // radius is in %theme-alert
+			nth($type,7)
+		);
+	    @extend %alert;
+	    color: nth($type,8);
+	    a, a:visited {
+			color: nth($type,9);
+		}
+	}
+}
+
+.alert-close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 9px;
+	cursor: pointer;
+	@include rem(font-size, 20px);
+	font-weight: bold;
+	line-height: .75em;
+	text-align: center;
+	vertical-align: middle;
+	
+	&:active {
+		background-color: rgba(0,0,0,0.2);
+	}
+}
+
+.alert--flyover {
+	max-width: 100%;
+	position: relative;
+	margin: 0;
+	@include rem(padding, $alert-flyover-padding);
+	@include border-radius(0);
+	text-align: center;
+	p {
+		max-width: $alert-constrained-width;
+	}
+	.alert-inner {
+		max-width: $alert-constrained-width;
+		margin: 0 auto;
+	}
+}
